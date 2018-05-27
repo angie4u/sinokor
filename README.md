@@ -49,5 +49,109 @@ bot.dialog('greetings', [
     builder.Prompts.choice(session, "Which color?", "red|green|blue", { listStyle: 3 });
     ```
 3. Adaptive Card
+    * Adaptive Card 정의
+    ```
+    const adaptiveCard = {
+    'contentType': 'application/vnd.microsoft.card.adaptive',
+    'content': {
+      '$schema': 'http://adaptivecards.io/schemas/adaptive-card.json',
+      'type': 'AdaptiveCard',
+      'version': '1.0',
+      'body': [
+        {
+          'type': 'TextBlock',
+          'size': 'medium',
+          'weight': 'bolder',
+          'text': '출발 일자 선택',
+          'horizontalAlignment': 'center'
+        },
+        {
+          'type': 'Input.Date',
+          'placeholder': 'Due Date',
+          'id': 'DateVal',
+          'value': '2018-05-16'
+        },
+        {
+          'type': 'Input.Time',
+          'placeholder': 'Start time',
+          'id': 'TimeVal',
+          'value': '16:59'
+        }
+      ],
+      'actions': [
+        {
+          'type': 'Action.Submit',
+          'title': 'Submit',
+          'data': {
+            'id': '1234567890'
+  
+          },
+          'horizontalAlignment': 'center'
+        }
+      ]
+    }  
+    ```
+    
+    * Adaptive Card 사용
+    ```
+    function (session) {
+      if (session.message && session.message.value) {
+        console.log(session.message.value)
+        session.endDialogWithResult(session.message.value)
+        return
+      }
+      var msg = new builder.Message(session)
+          .addAttachment(adaptiveCard)
+      session.send(msg)
+    }
+    ```
 
 4. Connect to API - QnA Maker
+    ```
+    function (session, args) {
+    if(args&&args.reprompt){
+            session.send('처음으로 돌아가시려면 "그만"을 입력하시기 바랍니다!');
+        }
+        builder.Prompts.text(session,'qna dialog 입니다. 궁금하신 것을 입력하시기 바랍니다!');         
+    },
+    function (session, results) { 
+        if(results.response){
+            if(results.response=="그만"){
+                session.endDialog("FAQ를 종료합니다.");
+            }
+            else{
+                var question = results.response;
+                
+                //qna 호출
+                var lQnaMakerServiceEndpoint = '<EndpointURL입력>';        
+                var lQnaApi = 'generateAnswer';
+                var lKnowledgeBaseId = '<KnowledgeBaseId입력>';
+                var lSubscriptionKey = '<SubsriptionKey입력>';
+                var lKbUri = lQnaMakerServiceEndpoint +lKnowledgeBaseId + '/' + lQnaApi;
+                request({
+                    url: lKbUri,
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': lSubscriptionKey
+                    },
+                    body: '{"question":"' + question + '"}'
+                },
+                function (error, response, body){
+                    var lResult;
+                    var stopQNA;
+                    if(!error){
+                        lResult = JSON.parse(body);
+                        
+                    }else{
+                        lResult.answer = "Unfortunately an error occurred. Try again.(fQnAMaker)";
+                        lResult.score = 0;
+                    }                    
+                    session.send(lResult.answers[0].answer);        
+                    session.replaceDialog('FAQ',{reprompt: true});        
+                                
+                })
+            }
+        }
+    }
+    ```
