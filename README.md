@@ -42,10 +42,10 @@ bot.dialog('greetings', [
 
     // 3. Choice Prompt
     // ListStyle passed in as Enum
-builder.Prompts.choice(session, "Which color?", "red|green|blue", { listStyle: builder.ListStyle.button });
+    builder.Prompts.choice(session, "Which color?", "red|green|blue", { listStyle: builder.ListStyle.button });
 
-// ListStyle passed in as index
-builder.Prompts.choice(session, "Which color?", "red|green|blue", { listStyle: 3 });
+    // ListStyle passed in as index
+    builder.Prompts.choice(session, "Which color?", "red|green|blue", { listStyle: 3 });
     ```
 3. Adaptive Card
 
