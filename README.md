@@ -1,0 +1,2 @@
+# sinokor
+Sinokor chatbot project
