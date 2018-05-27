@@ -29,7 +29,8 @@ bot.dialog('greetings', [
 ```
 
 2. Using Prompts
-![001](./images/001.png)
+
+    ![001](./images/001.png)
 
     [Example]
     ```
