@@ -6,7 +6,8 @@ This repository is for Sinokor chatbot Hackfest project.
 * [Node (v8.11.2)](https://nodejs.org/ko/)
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [Bot Framework Emulator](https://github.com/Microsoft/BotFramework-Emulator/releases)
-
+    * [Documnets for Bot Framework Emulator V4](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator?view=azure-bot-service-3.0) 
+* [ngrok](https://ngrok.com/download)
 ### Dev Environment Setups
 1. Local Dev Environmnet Setting
 2. Create Azure Bot Service on Azure Portal  
